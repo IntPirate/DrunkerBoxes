@@ -1,30 +1,9 @@
-
-
-/*********************************************************************
-This is an example for our Monochrome OLEDs based on SSD1306 drivers
-
-  Pick one up today in the adafruit shop!
-  ------> http://www.adafruit.com/category/63_98
-
-This example is for a 64x48 size display using I2C to communicate
-3 pins are required to interface (2 I2C and one reset)
-
-Adafruit invests time and resources providing this open source code,
-please support Adafruit and open-source hardware by purchasing
-products from Adafruit!
-
-Written by Limor Fried/Ladyada  for Adafruit Industries.
-BSD license, check license.txt for more information
-All text above, and the splash screen must be included in any redistribution
-*********************************************************************/
-
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-
 
 // SCL GPIO5
 // SDA GPIO4
@@ -35,7 +14,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 #define XPOS 0
 #define YPOS 1
 #define DELTAY 2
-
 
 #define LOGO16_GLCD_HEIGHT 48
 #define LOGO16_GLCD_WIDTH  64
@@ -103,40 +81,28 @@ void setup()   {
 }
 
 char showtext(String Message){
-    display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.setCursor(0,0);
-    display.clearDisplay();
-    display.println(Message);
-    display.display();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.clearDisplay();
+  display.println(Message);
+  display.display();
 }
 
 void loop() {
-
-showtext("hi");
+showtext("Checking...");
 delay(1000);
-showtext("Going to the internet");
 if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
   HTTPClient http;  //Declare an object of class HTTPClient
-
-    http.begin("http://drunkerbot.hardwareflare.com/drunkerstate");  //Specify request destination
-    int httpCode = http.GET();                                                                  //Send the request
-
+    http.begin("http://drunkerbot.hardwareflare.com/api/status/state");  //Specify request destination
+    int httpCode = http.GET();                                      //Send the request
     if (httpCode > 0) { //Check the returning code
-
       String payload = http.getString();   //Get the request response payload
-      Serial.println(payload);                     //Print the response payload
+      Serial.println(payload);             //Print the response payload
+      display.clearDisplay();
       display.println(payload);
-      delay(1000);
-     
-          display.clearDisplay();
-          display.drawBitmap(0,0,logo16_glcd_bmp,64, 48,1);
-          display.display();
-          delay(8000);
-     
-        display.display();
+      display.display();
     }
-
     http.end();   //Close connection
 }
 delay(30000);    //Send a request every 30 seconds
