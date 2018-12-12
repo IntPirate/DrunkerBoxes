@@ -6,8 +6,8 @@
 #include <ESP8266HTTPClient.h>
 
 //WiFi Configuration (change these to your WiFi settings
-#define WiFi_AP "OnePlus"
-#define WiFi_PW "test1234"
+#define WiFi_AP "Wifi_Name"
+#define WiFi_PW "Your_Password"
 #define WiFi_retry 500  // How many milliseconds before trying to connect to WiFi again?
 
 //Other DrunkerTracker Settings
@@ -20,7 +20,7 @@
 #define LOGO16_GLCD_HEIGHT 48
 #define LOGO16_GLCD_WIDTH  64
   
-  
+
 Adafruit_SSD1306 display(OLED_RESET); // Make a display and name it "display"
 HTTPClient http;  // Make an HTTP Client named "http"
 
