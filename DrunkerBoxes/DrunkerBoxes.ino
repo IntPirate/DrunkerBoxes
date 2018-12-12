@@ -6,8 +6,8 @@
 #include <ESP8266HTTPClient.h>
 
 //WiFi Configuration (change these to your WiFi settings
-#define WiFi_AP "OnePlus"
-#define WiFi_PW "test1234"
+#define WiFi_AP "WIFI_NAME"
+#define WiFi_PW "WIFI_PASSWORD"
 #define WiFi_retry 500  // How many milliseconds before trying to connect to WiFi again?
 
 //Other DrunkerTracker Settings
