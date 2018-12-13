@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#include "Adafruit_SSD1306.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <Adafruit_NeoPixel.h>
@@ -32,6 +32,7 @@ String result;
 
 //Other DrunkerTracker Settings
 #define dt_pollingRate 57000  // How many millseconds before checking the status again
+
 
 //OLED Configuration
 // SCL GPIO5
@@ -77,24 +78,18 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 void setup()   {
     //We will use the serial line for debugging our code
     Serial.begin(9600);
-   
     //Set up a wifi connection
     //These are configure at the top of this sketch
     WiFi.begin(WiFi_AP, WiFi_PW);
-    
   // Board Selection for the Setup Function
-  
   Serial.println("Board Selected: " + DrunkerBoard);
-  
   if (DrunkerBoard == "D1_Onboard") {
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, HIGH);
-  
   } else if (DrunkerBoard == "D1_WS2812") {
      pixels.begin(); // This initializes the NeoPixel library.
      white();
   } else if (DrunkerBoard == "D1_OLED") {
-  
     // Set up the OLED display
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 64x48)
     // Show image buffer on the display hardware.
@@ -105,11 +100,8 @@ void setup()   {
     // Clear the buffer.
     display.clearDisplay();
   }
-  
-  
-  // Do this for all boards
-   
-  // Connect to the WiFi
+   // Do this for all boards
+   // Connect to the WiFi
   Serial.print("Connecting");
   while (WiFi.status() != WL_CONNECTED) { // loop while the wifi status is not equal to 'true' 
       delay(WiFi_retry); // wait a bit
@@ -122,6 +114,7 @@ void setup()   {
     Serial.println(WiFi.localIP());
   }
 
+
 char resetText() {
   //This function
   display.setTextSize(1);
@@ -132,44 +125,36 @@ char resetText() {
 }
 
 void loop() {
+
   result = getDrunkerState();
   Serial.println(" Fetch DrunkerState ");
   Serial.print("The Result is ");
   Serial.println(result);
-   
     // Board Selection for the program loop
-    
     if (DrunkerBoard == "D1_Onboard") {
-
     if (result == "true") { 
       digitalWrite(LED_BUILTIN, LOW);  // We go WAY low.  The LED_BUILTIN Pin on the WEMOS D1 is active LOW.
       }
     else if (result == "false") {
       digitalWrite(LED_BUILTIN, HIGH);
     }
-    
-    } else if (DrunkerBoard == "D1_WS2812") {
-    
+    } else if (DrunkerBoard == "D1_WS2812") 
       if (result == "true") { 
       green();
     }
     else if (result == "false") {
       red();
     }
-    
     } else if (DrunkerBoard == "D1_OLED") {
       resetText();
       display.println(" Checking ");
       display.println("   ...    ");
       display.display();
-    
     }
-         
             resetText();  // Get the screen ready for a message
             display.println("DrunkerBox");
             display.println(" Not Live ");
             display.display();
-        
       delay(dt_pollingRate);  // Wait for the polling rate before checking again
       resetText();
       display.drawBitmap(LOGO16_GLCD_HEIGHT, LOGO16_GLCD_WIDTH, logo16_glcd_bmp, 0, 0, 1);
