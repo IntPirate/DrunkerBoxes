@@ -20,7 +20,7 @@
 #define LOGO16_GLCD_HEIGHT 48
 #define LOGO16_GLCD_WIDTH  64
   
-
+  
 Adafruit_SSD1306 display(OLED_RESET); // Make a display and name it "display"
 HTTPClient http;  // Make an HTTP Client named "http"
 
