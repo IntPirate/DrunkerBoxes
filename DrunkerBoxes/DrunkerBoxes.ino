@@ -1,13 +1,13 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
-#include "Adafruit_SSD1306.h"
+#include <Adafruit_SSD1306.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <Adafruit_NeoPixel.h>
 
 #ifdef __AVR__
-  #include <avr/power.h>
+#include <avr/power.h>
 #endif
 
 #define PIN            D2
@@ -76,19 +76,19 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 //#endif
 
 void setup()   {
-    //We will use the serial line for debugging our code
-    Serial.begin(9600);
-    //Set up a wifi connection
-    //These are configure at the top of this sketch
-    WiFi.begin(WiFi_AP, WiFi_PW);
+  //We will use the serial line for debugging our code
+  Serial.begin(9600);
+  //Set up a wifi connection
+  //These are configure at the top of this sketch
+  WiFi.begin(WiFi_AP, WiFi_PW);
   // Board Selection for the Setup Function
   Serial.println("Board Selected: " + DrunkerBoard);
   if (DrunkerBoard == "D1_Onboard") {
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, HIGH);
   } else if (DrunkerBoard == "D1_WS2812") {
-     pixels.begin(); // This initializes the NeoPixel library.
-     white();
+    pixels.begin(); // This initializes the NeoPixel library.
+    white();
   } else if (DrunkerBoard == "D1_OLED") {
     // Set up the OLED display
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 64x48)
@@ -100,19 +100,19 @@ void setup()   {
     // Clear the buffer.
     display.clearDisplay();
   }
-   // Do this for all boards
-   // Connect to the WiFi
+  // Do this for all boards
+  // Connect to the WiFi
   Serial.print("Connecting");
-  while (WiFi.status() != WL_CONNECTED) { // loop while the wifi status is not equal to 'true' 
-      delay(WiFi_retry); // wait a bit
-      Serial.print("."); // make the loading bar grow
-      // This loop will never break for as long as it cannot connect to the network
-    }
-    // Once connected, the loop will break and display the device network address
-    Serial.println(); // skip a line
-    Serial.print("Connected, IP address: ");
-    Serial.println(WiFi.localIP());
+  while (WiFi.status() != WL_CONNECTED) { // loop while the wifi status is not equal to 'true'
+    delay(WiFi_retry); // wait a bit
+    Serial.print("."); // make the loading bar grow
+    // This loop will never break for as long as it cannot connect to the network
   }
+  // Once connected, the loop will break and display the device network address
+  Serial.println(); // skip a line
+  Serial.print("Connected, IP address: ");
+  Serial.println(WiFi.localIP());
+}
 
 
 char resetText() {
@@ -130,36 +130,28 @@ void loop() {
   Serial.println(" Fetch DrunkerState ");
   Serial.print("The Result is ");
   Serial.println(result);
-    // Board Selection for the program loop
-    if (DrunkerBoard == "D1_Onboard") {
-    if (result == "true") { 
+ 
+  // Board Selection for the program loop
+  if (DrunkerBoard == "D1_Onboard") {
+    if (result == "true") {
       digitalWrite(LED_BUILTIN, LOW);  // We go WAY low.  The LED_BUILTIN Pin on the WEMOS D1 is active LOW.
-      }
-    else if (result == "false") {
+    } else if (result == "false") {
       digitalWrite(LED_BUILTIN, HIGH);
     }
-    } else if (DrunkerBoard == "D1_WS2812") 
-      if (result == "true") { 
+  } else if (DrunkerBoard == "D1_WS2812") {
+    if (result == "true") {
       green();
-    }
-    else if (result == "false") {
+    } else if (result == "false") {
       red();
     }
-    } else if (DrunkerBoard == "D1_OLED") {
-      resetText();
-      display.println(" Checking ");
-      display.println("   ...    ");
-      display.display();
-    }
-            resetText();  // Get the screen ready for a message
-            display.println("DrunkerBox");
-            display.println(" Not Live ");
-            display.display();
-      delay(dt_pollingRate);  // Wait for the polling rate before checking again
-      resetText();
-      display.drawBitmap(LOGO16_GLCD_HEIGHT, LOGO16_GLCD_WIDTH, logo16_glcd_bmp, 0, 0, 1);
-      display.display();
-      delay(3000);
+  } else if (DrunkerBoard == "D1_OLED") {
+    resetText();
+    display.println(" Checking ");
+    display.println("   ...    ");
+    display.display();
+  }
+
+  delay(3000);
 }
 
 String getDrunkerState() {
@@ -172,44 +164,39 @@ String getDrunkerState() {
       Serial.println(result);
       http.end(); // End this http request so we can start a new one
       return result;
-   }
+    }
   }
- }
+}
 
 
 String getStreamerName() {
   http.begin("http://drunkerbot.hardwareflare.com/api/status/host");  //Check the bot API for the streamer's name
-   if (http.GET() > 0) {
-     resetText();  // Get the screen ready for a message
-     display.println("DrunkerBox");
-     display.println("Hosted by:");
-     display.println(http.getString());
-     display.display();
-     http.end();      }
-      }
+  if (http.GET() > 0) {
+    resetText();  // Get the screen ready for a message
+    display.println("DrunkerBox");
+    display.println("Hosted by:");
+    display.println(http.getString());
+    display.display();
+    http.end();
+  }
+}
 
 
-   void green() {
-    pixels.setPixelColor(0, pixels.Color(0,255,0));
-    pixels.show();
- 
-   }
-   void red() {
-    pixels.setPixelColor(0, pixels.Color(255,0,0));
-    pixels.show();
- 
-   }
+void green() {
+  pixels.setPixelColor(0, pixels.Color(0, 255, 0));
+  pixels.show();
+}
+void red() {
+  pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+  pixels.show();
+}
 
-   void blue() {
-    pixels.setPixelColor(0, pixels.Color(0,0,255));
-    pixels.show();
- 
-   }
+void blue() {
+  pixels.setPixelColor(0, pixels.Color(0, 0, 255));
+  pixels.show();
+}
 
-   void white() {
-    pixels.setPixelColor(0, pixels.Color(255,255,255));
-    pixels.show();
- 
-   }
-
-
+void white() {
+  pixels.setPixelColor(0, pixels.Color(255, 255, 255));
+  pixels.show();
+}
