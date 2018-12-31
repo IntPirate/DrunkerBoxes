@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+*.json
+build
+WIFI_Config.h
