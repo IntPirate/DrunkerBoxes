@@ -6,6 +6,9 @@ need to add pizza and shoots frames
 */
 
 #include<Arduino.h>
+#include "Adafruit_SSD1306.h"
+
+Adafruit_SSD1306 display(OLED_RESET); // Make a display and name it "display"
 
 static const unsigned char PROGMEM logo16_glcd_bmp[] ={
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
