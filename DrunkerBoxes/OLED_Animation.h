@@ -6,9 +6,6 @@ need to add pizza and shoots frames
 */
 
 #include<Arduino.h>
-#include "Adafruit_SSD1306.h"
-
-Adafruit_SSD1306 display(OLED_RESET); // Make a display and name it "display"
 
 static const unsigned char PROGMEM logo16_glcd_bmp[] ={
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -420,24 +417,3 @@ const unsigned char Restroom_break [] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-void Display_Frame(Frame_Name){
-    display.drawBitmap(0, 0, Frame_Name, LOGO16_GLCD_WIDTH, LOGO16_GLCD_HEIGHT, 1);
-    display.display();
-    delay(animation_delay);
-    display.clearDisplay();
-}
-
-void Fill_beer_Animation(){
-    Display_Frame(empty);
-    Display_Frame(bottle_full_and_glass_empty);
-    Display_Frame(fill_up_1);
-    Display_Frame(fill_up_2);
-    Display_Frame(fill_up_3);
-    Display_Frame(filling_up_10);
-    Display_Frame(filling_up_20);
-    Display_Frame(filling_up_35);
-    Display_Frame(filling_up_50);
-    Display_Frame(filling_up_75);
-    Display_Frame(filling_up_90);
-    Display_Frame(filling_up_100);
-}
